@@ -251,7 +251,6 @@ class Testworkflow:
         print(data)
         result = InterfaceExplorer.interface_result_job(data)
         ActionExplorer.action_check_job_task_status(job_id, 2)
-
         assert 0 == len(result.json()["data"]["items"])
 
         # TP结果为一列

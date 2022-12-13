@@ -30,7 +30,7 @@ class InterfaceExplorer:
         return result
 
     def interface_connect_failed(auth, data, default_assert=True):
-        print("登录失败接口")
+        print("登录接口")
         # url = '/api-nebula/db/connect'
         url = '/api-nebula/db/connect'
         headers = {
