@@ -7,7 +7,7 @@
   python3 -m pytest -m login
   ```
 
-- workflow测试用用例执行
+- workflow测试用例执行
 
   ```
   python3 -m pytest -m workflow
