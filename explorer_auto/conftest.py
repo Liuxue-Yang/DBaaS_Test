@@ -1,4 +1,7 @@
 import pytest
+import csv
+import os
+import random
 from explorer_auto.common.yaml_util import clear_config_yaml
 from explorer_auto.action.action_explorer import ActionExplorer
 
@@ -33,4 +36,34 @@ def clear_config():
         ]
     for a in workflows:
         ActionExplorer.action_ceate_workflow(a["name"],a["schema"])
+    # 要写入的文件名
+    filenames = [
+        r'explorer_auto/csv/1mb_player.csv',
+        r'explorer_auto/csv/1列_player.csv',
+        r'explorer_auto/csv/1行数据_player.csv',
+        r'explorer_auto/csv/10mb_player.csv',
+        r'explorer_auto/csv/10列_player.csv',
+        r'explorer_auto/csv/10行数据_player.csv',
+        r'explorer_auto/csv/50mb_player.csv',
+        r'explorer_auto/csv/50列_player.csv',
+        r'explorer_auto/csv/100mb_player.csv',
+        r'explorer_auto/csv/上传多个文件1_player.csv',
+        r'explorer_auto/csv/上传多个文件2_player.csv',
+        r'explorer_auto/csv/上传多个文件3_player.csv',
+        r'explorer_auto/csv/特殊字符_中英文_长度_2%$%$^player.csv',
+        r'explorer_auto/csv/非csv文件'
+    ]
+    absolute_paths = [os.path.abspath(filename) for filename in filenames]
+    # 随机数据的行数
+    num_rows = [55000,550,1,550000,550,10,2750000,550,5500000,5500000,5500000,5500000,55000,5000]
+    # 随机数据的列数
+    num_cols = [3,1,3,3,10,3,3,50,3,3,3,3,3,3]
+    # 使用 with 语句打开文件，并创建一个 CSV 写入器
+    for i in range(len(filenames)):
+        filename = filenames[i]
+        with open(filename, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            for j in range(num_rows[i]):
+                row = [('player' + str(random.randint(1, 10000000)))] + [random.randint(1, 100) for _ in range(num_cols[i] - 1)]
+                writer.writerow(row)
 

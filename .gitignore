@@ -2,8 +2,30 @@
 
 .pytest_cache
 
+/explorer_auto/csv/1mb_player.csv
+/explorer_auto/csv/1列_player.csv
+/explorer_auto/csv/10mb_player.csv
+/explorer_auto/csv/10列_player.csv
+/explorer_auto/csv/10行数据_player.csv
+/explorer_auto/csv/50mb_player.csv
+/explorer_auto/csv/50列_player.csv
+/explorer_auto/csv/100mb_player.csv
+/explorer_auto/csv/上传多个文件1_player.csv
+/explorer_auto/csv/上传多个文件2_player.csv
+/explorer_auto/csv/上传多个文件3_player.csv
+/explorer_auto/csv/特殊字符_中英文_长度_2%$%$^player.csv
+/explorer_auto/csv/非csv文件
+/explorer_auto/csv/非csv文件
+
+500mb_player.csv
+
+991_1G_player.csv
+
+997_0m_player.csv
+
 assets
 
 report
+
 
 .reportreport.html

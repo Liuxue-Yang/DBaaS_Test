@@ -1,5 +1,6 @@
 import json
 import time
+import os
 import csv
 import string
 from urllib.parse import urlencode
@@ -389,10 +390,23 @@ class InterfaceExplorer:
 
         return result
 
-    def import_add_csv(path,default_assert=True):
+    def import_add_csv(file_path,default_assert=True):
         print('上传csv文件')
         url = '/api/files'
-        files = {'file': open(path, 'rb')}
+        files = {'file': open(file_path, 'rb')}
+        result = RequestMain.request_main(method="put",url=url,files=files,
+                                            default_assert=default_assert)
+        print(result)
+        return result
+
+    def import_add_Multiple_csv(path1,path2,path3,default_assert=True):
+        print('上传多个csv文件')
+        url = '/api/files'
+        files = {
+            'file1': open(path1, 'rb'),
+            'file2': open(path2, 'rb'),
+            'file3': open(path3, 'rb'),
+        }
         result = RequestMain.request_main(method="put",url=url,files=files,
                                             default_assert=default_assert)
         return result
