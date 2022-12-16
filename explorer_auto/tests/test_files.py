@@ -16,7 +16,23 @@ class Testfiles:
         # 转换为绝对路径
         abs_path = os.path.abspath(path)
         # 获取相对路径内所有文件
-        files = os.listdir(abs_path)
+        # files = os.listdir(abs_path)
+        files = [
+        '100mb_player.csv',
+        '10mb_player.csv', 
+        '10列_player.csv', 
+        '10行数据_player.csv', 
+        '1mb_player.csv', 
+        '1列_player.csv', 
+        '1行数据_player.csv', 
+        '50mb_player.csv', 
+        '50列_player.csv', 
+        '上传多个文件1_player.csv', 
+        '上传多个文件2_player.csv', 
+        '上传多个文件3_player.csv', 
+        '特殊字符_中英文_长度_2%$%$^player.csv', 
+        '非csv文件'
+        ]
         # 循环文件
         for file in files:
             # 拼接文件的绝对路径
