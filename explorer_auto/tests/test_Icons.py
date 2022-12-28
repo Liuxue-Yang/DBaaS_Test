@@ -21,7 +21,6 @@ class Testicons:
             code = InterfaceExplorer.add_Icon_Group(data).json()["code"]
             assert 0 == code
 
-
         # 获取图标组 判断所添加的组
         json_data = InterfaceExplorer.get_Icon_Group().json()
         assert 'test' == json_data["data"]["items"][0]["name"]
@@ -82,5 +81,14 @@ class Testicons:
             '123456788'
             ]
         for icon_id_Group in id:
+            code = InterfaceExplorer.delete_Icon_Group(icon_id_Group).json()["code"]
+            assert 0 == code
+
+        # 循环创建200个图标组并删除
+        for i in range(200):
+            data = {"name":"QA" + str(QA_random),"type":"svg"}
+            json_data = InterfaceExplorer.add_Icon_Group(data).json()
+            assert 0 == json_data["code"]
+            icon_id_Group = json_data["data"]["id"]
             code = InterfaceExplorer.delete_Icon_Group(icon_id_Group).json()["code"]
             assert 0 == code

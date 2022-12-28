@@ -499,6 +499,8 @@ class InterfaceExplorer:
         data = json.dumps(data)
         result = RequestMain.request_main(method="post",url=url,headers=headers,
                                             data=data,default_assert=default_assrt)
+
+        print(data)
         return result
 
     def get_Icon_Group(default_assert=True):

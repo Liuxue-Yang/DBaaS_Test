@@ -56,12 +56,12 @@ class Testworkflow:
         workflow_list = InterfaceExplorer.interface_get_workflow().json()["data"]["items"][0]["id"]
         assert workflow_id == workflow_list
 
-        # # for循环创建200个workflow
-        # for i in range(200):
-        #     data = {"name":'QA_创建多个workflow_' + str(QA_random),"schema":""}
-        #     workflow_id = InterfaceExplorer.interface_create_workflow(data).json()["data"]["id"]
-        #     workflow_list = InterfaceExplorer.interface_get_workflow().json()["data"]["items"][0]["id"]
-        #     assert workflow_id == workflow_list
+        # for循环创建200个workflow
+        for i in range(200):
+            data = {"name":'QA_创建多个workflow_' + str(QA_random),"schema":""}
+            workflow_id = InterfaceExplorer.interface_create_workflow(data).json()["data"]["id"]
+            workflow_list = InterfaceExplorer.interface_get_workflow().json()["data"]["items"][0]["id"]
+            assert workflow_id == workflow_list
     
         # 创建workflow Schema参数填写、特殊字符、小数点并获取列表取出workflow_id进行校验
         data = {"name":'QA_！@#￥%&￥*@·、/特殊Schema_' + str(QA_random),"schema":"219837219847.123.24.123！@#！@%@！%！@.中文、英文"}
@@ -287,12 +287,12 @@ class Testworkflow:
         result = InterfaceExplorer.interface_result_job(data)
         assert 3 == len(result.json()["data"]["items"][0])
 
-        # # 循环创建200个job
-        # for i in range(200):
-        #     workflow_id = read_yaml_by_key("TP-AP-TP",'/conf/tmp.yaml')
-        #     data = {"flowId":str(workflow_id)}
-        #     job_code = InterfaceExplorer.interface_add_job(data).json()["code"]
-        #     assert 0 == job_code
+        # 循环创建200个job
+        for i in range(200):
+            workflow_id = read_yaml_by_key("TP-AP-TP",'/conf/tmp.yaml')
+            data = {"flowId":str(workflow_id)}
+            job_code = InterfaceExplorer.interface_add_job(data).json()["code"]
+            assert 0 == job_code
 
         # 注销接口
         InterfaceExplorer.interface_disconnect()
