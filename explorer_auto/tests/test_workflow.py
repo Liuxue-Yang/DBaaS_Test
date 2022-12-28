@@ -88,7 +88,6 @@ class Testworkflow:
         tasks = InterfaceExplorer.interface_get_id_workflow(workflow_id).json()["data"]["schema"]
         assert "219837219847.123.24.123！@#！@%@！%！@.中文、英文" == tasks
 
-        
         # 查看空workflow版本
         code1 = InterfaceExplorer.interface_history_workflow(workflow_id).json()["code"]
         assert 0 == code1

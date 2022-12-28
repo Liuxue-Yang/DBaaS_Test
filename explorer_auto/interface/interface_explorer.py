@@ -533,6 +533,7 @@ class InterfaceExplorer:
         data = json.dumps(data)
         result = RequestMain.request_main(method="put",url=url,headers=headers,
                                             data=data,default_assert=default_assert)
+        print(data)
         return result
     
     def add_Icon(icon_id_Group,data,default_assert=True):

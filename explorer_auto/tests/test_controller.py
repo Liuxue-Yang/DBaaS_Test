@@ -16,6 +16,3 @@ class Testcontroller:
 
         data = {"method":"GET","path":"/config/analytics/cluster"}
         InterfaceExplorer.get_controller(data)
-
-
-    
