@@ -92,3 +92,7 @@ class Testicons:
             icon_id_Group = json_data["data"]["id"]
             code = InterfaceExplorer.delete_Icon_Group(icon_id_Group).json()["code"]
             assert 0 == code
+
+        # 获取列表进行判断
+        icon_Group_list = InterfaceExplorer.get_Icon_Group().json()
+        assert [] == icon_Group_list["data"]["items"]
