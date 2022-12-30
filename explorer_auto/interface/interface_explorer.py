@@ -1,3 +1,4 @@
+import base64
 import json
 import time
 import os
@@ -16,6 +17,7 @@ class InterfaceExplorer:
         print("登录接口")
         # url = '/api-nebula/db/connect'
         url = '/api-nebula/db/connect'
+        
         headers = {
             'Content-Type': 'application/json;',
             'Authorization': auth
@@ -30,10 +32,14 @@ class InterfaceExplorer:
         # write_yaml_by_key({"Cookie": explorer_token},"/conf/tmp.yaml")
         return result
 
-    def interface_connect_failed(auth, data, default_assert=True):
+    def interface_connect_failed(userName,password,data, default_assert=True):
         print("登录接口")
         # url = '/api-nebula/db/connect'
         url = '/api-nebula/db/connect'
+        # Encrypted auth information
+        auth_info = '["{}","{}"]'.format(userName,password).encode()
+        auth_info = base64.b64encode(auth_info)
+        auth = "Bearer "+ auth_info.decode('UTF-8')
         headers = {
             'Content-Type': 'application/json;',
             'Authorization': auth
