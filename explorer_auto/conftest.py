@@ -79,3 +79,5 @@ def clear_config():
                     row = [('player' + str(random.randint(1, 10000000)))] + [random.randint(1, 100) for _ in range(num_cols[i] - 1)]
                     writer.writerow(row)
 
+
+                    
