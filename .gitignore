@@ -1,3 +1,4 @@
+.pytest_cache
 .DS_Store
 
 /explorer_auto/csv/1行数据_player.csv

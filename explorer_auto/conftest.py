@@ -48,6 +48,7 @@ def clear_config():
         # 如果存在 csv 文件，打印提示信息
         print("目录下存在 csv 文件，不执行相应的代码")
     else:
+        print('正在动态生成所需要的Csv文件,请稍等')
         # 要写入的文件名
         filenames = [
             r'explorer_auto/csv/1mb_player.csv',

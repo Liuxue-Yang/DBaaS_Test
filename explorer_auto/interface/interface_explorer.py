@@ -2,10 +2,15 @@ import base64
 import json
 import time
 import os
+import uuid
+import aiohttp
+import asyncio
 import csv
 import string
+import websocket
+import websockets
 from urllib.parse import urlencode
-
+from websocket import create_connection
 from urllib3 import encode_multipart_formdata
 from explorer_auto.common.request_util import RequestMain
 from requests_toolbelt import MultipartEncoder
@@ -627,7 +632,7 @@ class InterfaceExplorer:
 
     def put_config(data,default_assert=True):
         print('更新配置')
-        url = '/api-analytics/config/global'
+        url = '/api-config/global'
         headers = {
             'Content-Type': 'application/json;',
             'cookie':InterfaceExplorer.Cookie
@@ -639,7 +644,7 @@ class InterfaceExplorer:
 
     def get_config(default_assert=True):
         print('获取配置')
-        url = '/api-analytics/config/global'
+        url = '/api-config/global'
         headers = {
             'Content-Type': 'application/json;',
             'cookie':InterfaceExplorer.Cookie
@@ -682,3 +687,32 @@ class InterfaceExplorer:
         result = RequestMain.request_main(method="post",url=url,headers=headers,
                                             data=data,default_assert=default_assert)
         return result
+
+    # WebSocket异步接口
+    async def test_WebSocket_ngql(ngql):
+        msg_id = str(uuid.uuid4())
+        headers = {
+            'cookie': InterfaceExplorer.Cookie,
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.ws_connect('ws://192.168.8.131:7002/nebula_ws',headers=headers) as ws:
+                await ws.send_json({
+                    "header": {
+                        "msgId": msg_id,
+                        "version": "1.0"
+                    },
+                    "body": {
+                        "product": "Studio",
+                        "msgType": "ngql",
+                        "content": {
+                            "gql": ngql
+                        }
+                    }
+                })
+                result = await ws.receive()
+                result_json = result.json()['header']['msgId']
+                if msg_id == result_json:
+                    print("UUID match")
+                else:
+                    print("UUID does not match")
+                return result
