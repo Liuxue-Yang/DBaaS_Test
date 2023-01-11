@@ -15,10 +15,10 @@ class Testlogin:
     def test_qa(self):
         ngql = [
             'show spaces',
-            'use sf1',
-            'MATCH ()-[e3]->(v2:`Comment`) RETURN e3 LIMIT 1'
-
+            'use sf1_1',
+            'match (v) return v limit 100'
         ]
+
         result = asyncio.run(InterfaceExplorer.test_WebSocket_batch_ngql(ngql)).json()
         # result1 = result["body"]["content"]["data"]["tables"]
         print(result)
