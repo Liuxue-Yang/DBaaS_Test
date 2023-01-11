@@ -13,13 +13,12 @@ class Testlogin:
     
     @pytest.mark.ngql
     def test_qa(self):
-        ngql1 = [
+        ngql = [
             'show spaces',
             'use sf1',
-            'MATCH ()-[e3]->(v2:`Comment`) RETURN e3 LIMIT 1000'
+            'MATCH ()-[e3]->(v2:`Comment`) RETURN e3 LIMIT 1'
 
         ]
-        for ngql in ngql1:
-            result = asyncio.run(InterfaceExplorer.test_WebSocket_ngql(ngql)).json()
-            # result1 = result["body"]["content"]["data"]["tables"]
-            print(result)
+        result = asyncio.run(InterfaceExplorer.test_WebSocket_batch_ngql(ngql)).json()
+        # result1 = result["body"]["content"]["data"]["tables"]
+        print(result)

@@ -15,6 +15,8 @@ from urllib3 import encode_multipart_formdata
 from explorer_auto.common.request_util import RequestMain
 from requests_toolbelt import MultipartEncoder
 
+from explorer_auto.common.yaml_util import read_yaml_by_key
+
 class InterfaceExplorer:
     #API 接口
     Cookie = ""
@@ -688,14 +690,15 @@ class InterfaceExplorer:
                                             data=data,default_assert=default_assert)
         return result
 
-    # WebSocket异步接口
+    # WebSocket异步单条语句接口
     async def test_WebSocket_ngql(ngql):
         msg_id = str(uuid.uuid4())
         headers = {
             'cookie': InterfaceExplorer.Cookie,
         }
+        ip = read_yaml_by_key("graphd_ip",'/conf/conf.yaml')
         async with aiohttp.ClientSession() as session:
-            async with session.ws_connect('ws://192.168.8.131:7002/nebula_ws',headers=headers) as ws:
+            async with session.ws_connect('ws://{}:7002/nebula_ws'.format(ip),headers=headers) as ws:
                 await ws.send_json({
                     "header": {
                         "msgId": msg_id,
@@ -709,6 +712,37 @@ class InterfaceExplorer:
                         }
                     }
                 })
+                result = await ws.receive()
+                result_json = result.json()['header']['msgId']
+                if msg_id == result_json:
+                    print("UUID match")
+                else:
+                    print("UUID does not match")
+                return result
+
+    # WebSocket异步多条语句接口
+    async def test_WebSocket_batch_ngql(ngql):
+        msg_id = str(uuid.uuid4())
+        headers = {
+            'cookie': InterfaceExplorer.Cookie,
+        }
+        ip = read_yaml_by_key("graphd_ip",'/conf/conf.yaml')
+        async with aiohttp.ClientSession() as session:
+            async with session.ws_connect('ws://{}:7002/nebula_ws'.format(ip),headers=headers) as ws:
+                await ws.send_json({
+                    "header": {
+                        "msgId": msg_id,
+                        "version": "1.0"
+                    },
+                    "body": {
+                        "product": "Studio",
+                        "msgType": "batch_ngql",
+                        "content": {
+                            "gqls": ngql
+                        }
+                    }
+                })
+                print(msg_id)
                 result = await ws.receive()
                 result_json = result.json()['header']['msgId']
                 if msg_id == result_json:
