@@ -19,6 +19,5 @@ class Testlogin:
             'match (v) return v limit 100'
         ]
 
-        result = asyncio.run(InterfaceExplorer.test_WebSocket_batch_ngql(ngql)).json()
+        asyncio.run(InterfaceExplorer.test_WebSocket_batch_ngql(ngql)).json()
         # result1 = result["body"]["content"]["data"]["tables"]
-        print(result)

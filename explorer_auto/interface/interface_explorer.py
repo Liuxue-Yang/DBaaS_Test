@@ -692,6 +692,7 @@ class InterfaceExplorer:
 
     # WebSocket异步单条语句接口
     async def test_WebSocket_ngql(ngql):
+        print('异步执行单条语句')
         msg_id = str(uuid.uuid4())
         headers = {
             'cookie': InterfaceExplorer.Cookie,
@@ -714,6 +715,7 @@ class InterfaceExplorer:
                 })
                 result = await ws.receive()
                 result_json = result.json()['header']['msgId']
+                print(result)
                 if msg_id == result_json:
                     print("UUID match")
                 else:
@@ -722,6 +724,7 @@ class InterfaceExplorer:
 
     # WebSocket异步多条语句接口
     async def test_WebSocket_batch_ngql(ngql):
+        print('异步执行多条语句')
         msg_id = str(uuid.uuid4())
         headers = {
             'cookie': InterfaceExplorer.Cookie,
@@ -742,8 +745,8 @@ class InterfaceExplorer:
                         }
                     }
                 })
-                print(msg_id)
                 result = await ws.receive()
+                print(result)
                 result_json = result.json()['header']['msgId']
                 if msg_id == result_json:
                     print("UUID match")
