@@ -16,7 +16,7 @@ class Testworkflow:
         assert 50004002 == graphd_dag_code
 
         # 将graphd密码写入dag
-        data = {"method":"POST","path":"/config/graphd/pwd","requestData":"{\"graphdIp\":\"192.168.8.48:9669\",\"userName\":\"root\",\"password\":\"ISXxte7HukUok89Oi2a+HrvUz0h5JzKyZwbLePbMfphCset/bUj1Kvw0TpgdTF6Rg2ylQQf4ohQ5WiDVGmEXAHAlk63yPZiq9WlgOYA9lIdsS7huSc0w949hE+u9r21ezSmB3QBhKNBh4/NwQfvT8e3+PVmiVIRcZ2epvP/fv6w=\"}"}
+        data = {"method":"POST","path":"/config/graphd/pwd","requestData":"{\"graphdIp\":\"192.168.8.48:9669\",\"userName\":\"root\",\"password\":\"ENbRIaDCsD7PngbDIKREozznA19tl1PfsRG/5CWot8zcSf/JjGqRniFPbIgNt8Hq2S5KL5bPv4CKv+UdcnkWeazuIbgcuhgkeMd9MUaXNi2Zn4mteAfKd/JvqghVS+P+tZocI74KLoKAE0dbtnGVgvgMe1IfMD7vvp4oDCdVGcI=\"}"}
         graphd_dag = InterfaceExplorer.add_controller(data).json()["message"]
         assert 'Success' == graphd_dag
 
@@ -40,7 +40,7 @@ class Testworkflow:
         assert 'global' == name
 
         # 添加hdfs至配置并获取配置详情中的hdfs name 进行判断
-        data = {"value":"{\"hdfs\":[{\"name\":\"test\",\"value\":\"hdfs://192.168.8.168:9000/ll_test\",\"user\":\"root\"}],\"metad\":\"\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000,\"isCompleted\":false}"}
+        data = {"value":"{\"hdfs\":[{\"name\":\"test\",\"value\":\"hdfs://192.168.8.168:9000/ll_test\",\"user\":\"root\"}],\"metad\":\"\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000,\"isCompleted\":true}"}
         InterfaceExplorer.put_config(data)
         str = InterfaceExplorer.get_config().json()['data']['schema']
         hdfs = json.loads(str)["hdfs"][0]["name"]
@@ -151,7 +151,7 @@ class Testworkflow:
         job_list = InterfaceExplorer.interface_get_jobs().json()["data"]["items"][0]["id"]
         assert job_list == job_id
 
-        # 存在workFlow，起始task需要输入一个参数 不输入参数并创建失败
+        # 存在workFlow，起始task需要输入一个参数 不输入参数创建失败
         workflow_id = read_yaml_by_key("需要1个参数_单tasks_不输入参数","/conf/tmp.yaml")
         data = {"id":str(workflow_id)}
         job_code = InterfaceExplorer.interface_submit_job(workflow_id,data).json()["code"]

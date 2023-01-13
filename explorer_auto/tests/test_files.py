@@ -44,12 +44,13 @@ class Testfiles:
         print(files)
 
         # 调取列表 循环判断文件名称
-        json_data  = InterfaceExplorer.import_get_csv().json()["data"]["list"]
+        csv_data = InterfaceExplorer.import_get_csv()
+        json_data  = csv_data.json()["data"]["list"]
         for i in range(0, len(files)):
             assert files[i] == json_data[i]['name']
 
         # 校验列数、行数
-        json_data = InterfaceExplorer.import_get_csv().json()
+        json_data = csv_data.json()
         assert 1 == len(json_data["data"]["list"][5]["content"][0])   # 1列
         assert 10 == len(json_data["data"]["list"][2]["content"][0])  # 10列 
         assert 50 == len(json_data["data"]["list"][8]["content"][0])  # 10列

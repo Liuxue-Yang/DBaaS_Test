@@ -691,7 +691,7 @@ class InterfaceExplorer:
         return result
 
     # WebSocket异步单条语句接口
-    async def test_WebSocket_ngql(ngql):
+    async def test_WebSocket_ngql(ngql,*space):
         print('异步执行单条语句')
         msg_id = str(uuid.uuid4())
         headers = {
@@ -709,7 +709,8 @@ class InterfaceExplorer:
                         "product": "Studio",
                         "msgType": "ngql",
                         "content": {
-                            "gql": ngql
+                            "gql": ngql,
+                            "space":space
                         }
                     }
                 })
@@ -723,7 +724,7 @@ class InterfaceExplorer:
                 return result
 
     # WebSocket异步多条语句接口
-    async def test_WebSocket_batch_ngql(ngql):
+    async def test_WebSocket_batch_ngql(ngql,space):
         print('异步执行多条语句')
         msg_id = str(uuid.uuid4())
         headers = {
@@ -741,7 +742,8 @@ class InterfaceExplorer:
                         "product": "Studio",
                         "msgType": "batch_ngql",
                         "content": {
-                            "gqls": ngql
+                            "gqls": ngql,
+                            'space':space
                         }
                     }
                 })
