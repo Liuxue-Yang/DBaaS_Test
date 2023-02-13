@@ -5,6 +5,8 @@ import os
 import uuid
 import aiohttp
 import asyncio
+import requests
+import time
 import csv
 import string
 import websocket
@@ -14,7 +16,7 @@ from websocket import create_connection
 from urllib3 import encode_multipart_formdata
 from explorer_auto.common.request_util import RequestMain
 from requests_toolbelt import MultipartEncoder
-
+from multiprocessing import Process, Lock
 from explorer_auto.common.yaml_util import read_yaml_by_key
 
 class InterfaceExplorer:
@@ -107,8 +109,6 @@ class InterfaceExplorer:
         result = RequestMain.request_main(method="get", url=url, headers=headers,
                                                  default_assert=default_assert)
         return result
-
-    
 
     def interface_get_job_detail(job_id, default_assert=True):
         print("获取job详情接口")
@@ -277,6 +277,19 @@ class InterfaceExplorer:
                                             default_assert=default_assert)
         return result
 
+    def interface_get_job_list(data,default_assert=True):
+        print('获取job列表详情')
+        url = '/api-analytics/jobs/sync'
+        headers = {
+            'Content-Type': 'application/json;',
+            'Cookie': InterfaceExplorer.Cookie
+        }
+        data = json.dumps(data)
+        print(data)
+        result = RequestMain.request_main(method="post",url=url,headers=headers,
+                                            data=data,default_assert=default_assert)
+        return result
+
     def interface_get_id_job(job_id,default_assert=True):
         print('查看job详情')
         url = '/api-analytics/jobs/{}'.format(job_id)
@@ -403,10 +416,23 @@ class InterfaceExplorer:
 
         return result
 
-    def import_add_csv(file_path,default_assert=True):
+
+    def import_add_csv(file_path,csv_name,default_assert=True):
         print('上传csv文件')
         url = '/api/files'
-        files = {'file': open(file_path, 'rb')}
+        files = {
+            'file': open(
+                file_path,
+                 'rb'
+                 ),
+            'config': (
+                None, 
+                json.dumps({
+                    "name":csv_name,
+                    "delimiter":",",
+                    "withHeader":False
+                    }), 
+            'application/json')}
         result = RequestMain.request_main(method="put",url=url,files=files,
                                             default_assert=default_assert)
         print(result)
@@ -436,12 +462,14 @@ class InterfaceExplorer:
 
     def import_delete_csv(csv_name,default_assert=True):
         print('删除csv文件')
-        url = '/api/files/{}'.format(csv_name)
+        url = '/api/files'
         headers = {
+            'Content-Type': 'application/json;',
             'cookie':InterfaceExplorer.Cookie
         }
+        data = json.dumps({"names":[csv_name]})
         result = RequestMain.request_main(method="delete",url=url,headers=headers,
-                                            default_assert=default_assert)
+                                            data = data,default_assert=default_assert)
         return result
         
     def Single_ngql(ngql,default_assert=True):

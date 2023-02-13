@@ -1,5 +1,5 @@
 # 必改项：explorer-server的服务地址
-base_url: "http://192.168.8.48:7002"
+base_url: "http://192.168.8.131:7001"
 
 # 必改项：nebula grapd连接信息
 graphd_ip: "192.168.8.48"
