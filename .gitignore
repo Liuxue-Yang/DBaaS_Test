@@ -1,3 +1,4 @@
+.pytest_cache
 .DS_Store
 
 /explorer_auto/csv/1行数据_player.csv
@@ -24,5 +25,10 @@ assets
 
 report
 
+/explorer_auto/Compression testing
+
+/explorer_auto/a.js
+
+/explorer_auto/k6.exe
 
 .reportreport.html

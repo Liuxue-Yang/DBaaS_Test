@@ -5,6 +5,7 @@
 
   ```
   pip install -r requirements.txt
+  pip3 install -r requirements.txt
   ```
 
  - 所有用例执行

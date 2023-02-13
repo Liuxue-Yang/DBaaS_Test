@@ -11,12 +11,12 @@ class Testworkflow:
     @pytest.mark.workflow
     def test_controller(self):
         # 将错误graphd密码写入dag
-        data = {"method":"POST","path":"/config/graphd/pwd","requestData":"{\"graphdIp\":\"192.168.8.131:9669\",\"userName\":\"root\",\"password\":\"ISXxte7HukUok89Oi2a+HrvUz0h5JzKyZwbLePbMfphCset/bU123j1Kvw0TpgdTF6Rg2ylQQf4ohQ5WiDVGmEXAHAlk63yPZiq9WlgOYA9lIdsS7huSc0w949hE+u9r21ezSmB3QBhKNBh4/NwQfvT8e3+PVmiVIRcZ2epvP/fv6w=\"}"}
+        data = {"method":"POST","path":"/config/graphd/pwd","requestData":"{\"graphdIp\":\"192.168.8.48:9669\",\"userName\":\"root\",\"password\":\"ISXxte7HukUok89Oi2a+HrvUz0h5JzKyZwbLePbMfphCset/bU123j1Kvw0TpgdTF6Rg2ylQQf4ohQ5WiDVGmEXAHAlk63yPZiq9WlgOYA9lIdsS7huSc0w949hE+u9r21ezSmB3QBhKNBh4/NwQfvT8e3+PVmiVIRcZ2epvP/fv6w=\"}"}
         graphd_dag_code = InterfaceExplorer.add_controller(data).json()["code"]
         assert 50004002 == graphd_dag_code
 
         # 将graphd密码写入dag
-        data = {"method":"POST","path":"/config/graphd/pwd","requestData":"{\"graphdIp\":\"192.168.8.131:9669\",\"userName\":\"root\",\"password\":\"ISXxte7HukUok89Oi2a+HrvUz0h5JzKyZwbLePbMfphCset/bUj1Kvw0TpgdTF6Rg2ylQQf4ohQ5WiDVGmEXAHAlk63yPZiq9WlgOYA9lIdsS7huSc0w949hE+u9r21ezSmB3QBhKNBh4/NwQfvT8e3+PVmiVIRcZ2epvP/fv6w=\"}"}
+        data = {"method":"POST","path":"/config/graphd/pwd","requestData":"{\"graphdIp\":\"192.168.8.48:9669\",\"userName\":\"root\",\"password\":\"ENbRIaDCsD7PngbDIKREozznA19tl1PfsRG/5CWot8zcSf/JjGqRniFPbIgNt8Hq2S5KL5bPv4CKv+UdcnkWeazuIbgcuhgkeMd9MUaXNi2Zn4mteAfKd/JvqghVS+P+tZocI74KLoKAE0dbtnGVgvgMe1IfMD7vvp4oDCdVGcI=\"}"}
         graphd_dag = InterfaceExplorer.add_controller(data).json()["message"]
         assert 'Success' == graphd_dag
 
@@ -40,7 +40,7 @@ class Testworkflow:
         assert 'global' == name
 
         # 添加hdfs至配置并获取配置详情中的hdfs name 进行判断
-        data = {"value":"{\"hdfs\":[{\"name\":\"test\",\"value\":\"hdfs://192.168.8.168:9000/ll_test\",\"user\":\"root\"}],\"metad\":\"\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000,\"isCompleted\":false}"}
+        data = {"value":"{\"hdfs\":[{\"name\":\"test\",\"value\":\"hdfs://192.168.8.168:9000/ll_test\",\"user\":\"root\"}],\"metad\":\"\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000,\"isCompleted\":true}"}
         InterfaceExplorer.put_config(data)
         str = InterfaceExplorer.get_config().json()['data']['schema']
         hdfs = json.loads(str)["hdfs"][0]["name"]
@@ -70,7 +70,7 @@ class Testworkflow:
         assert workflow_id == workflow_list
 
         # 更新workflow 添加APSP算法
-        data = {"name":"更新添加APSP_" + str(QA_random),"schema":"{\"datasources\":[{\"type\":\"hdfs\",\"name\":\"test\",\"spec\":{\"user\":\"root\",\"url\":\"hdfs://192.168.8.168:9000/ll_test\"}}],\"tasks\":[{\"id\":\"analytics_apsp_1\",\"name\":\"APSP\",\"clusterSize\":1,\"type\":\"analytics_apsp\",\"spec\":{\"vtype\":\"string\",\"processes\":1,\"threads\":3,\"nebula_input_edges\":\"follow,serve\",\"nebula_input_edges_props\":\",\"},\"graph\":{\"x\":278,\"y\":-1,\"params\":[],\"groupName\":\"path\",\"input\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"weight\",\"dataType\":\"string\"}],\"output\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"count\",\"dataType\":\"string\"}]},\"datasink\":{\"type\":\"hdfs\",\"spec\":{\"url\":\"${test}/analytics/${job_id}/tasks/${task_id}/\",\"hdfsName\":\"test\",\"hdfsPath\":\"/analytics/${job_id}/tasks/${task_id}/\",\"user\":\"root\"}},\"datasource\":{\"type\":\"nebula\",\"spec\":{\"type\":\"nebula\",\"space\":\"demo_basketballplayer\",\"graphd\":\"192.168.8.131:9669\",\"user\":\"root\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000}}}],\"deps\":[]}"}
+        data = {"name":"更新添加APSP_" + str(QA_random),"schema":"{\"datasources\":[{\"type\":\"hdfs\",\"name\":\"test\",\"spec\":{\"user\":\"root\",\"url\":\"hdfs://192.168.8.168:9000/ll_test\"}}],\"tasks\":[{\"id\":\"analytics_apsp_1\",\"name\":\"APSP\",\"clusterSize\":1,\"type\":\"analytics_apsp\",\"spec\":{\"vtype\":\"string\",\"processes\":1,\"threads\":3,\"nebula_input_edges\":\"follow,serve\",\"nebula_input_edges_props\":\",\"},\"graph\":{\"x\":278,\"y\":-1,\"params\":[],\"groupName\":\"path\",\"input\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"weight\",\"dataType\":\"string\"}],\"output\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"count\",\"dataType\":\"string\"}]},\"datasink\":{\"type\":\"hdfs\",\"spec\":{\"url\":\"${test}/analytics/${job_id}/tasks/${task_id}/\",\"hdfsName\":\"test\",\"hdfsPath\":\"/analytics/${job_id}/tasks/${task_id}/\",\"user\":\"root\"}},\"datasource\":{\"type\":\"nebula\",\"spec\":{\"type\":\"nebula\",\"space\":\"demo_basketballplayer\",\"graphd\":\"192.168.8.48:9669\",\"user\":\"root\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000}}}],\"deps\":[]}"}
         InterfaceExplorer.interface_update_workflow(workflow_id,data)
         tasks = InterfaceExplorer.interface_get_id_workflow(workflow_id).json()["data"]["schema"]
         tasks_id = json.loads(tasks)["tasks"][0]["id"]
@@ -93,12 +93,12 @@ class Testworkflow:
         assert 0 == code1
 
         # 更新workflow运行job生成版本后查看workflow版本
-        data = {"name":"QA_生成版本_" + str(QA_random),"schema":"{\"datasources\":[{\"type\":\"hdfs\",\"name\":\"test\",\"spec\":{\"user\":\"root\",\"url\":\"hdfs://192.168.8.168:9000/ll_test\"}}],\"tasks\":[{\"id\":\"analytics_apsp_1\",\"name\":\"APSP\",\"clusterSize\":1,\"type\":\"analytics_apsp\",\"spec\":{\"vtype\":\"string\",\"processes\":1,\"threads\":3,\"nebula_input_edges\":\"follow,serve\",\"nebula_input_edges_props\":\",\"},\"graph\":{\"x\":278,\"y\":-1,\"params\":[],\"groupName\":\"path\",\"input\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"weight\",\"dataType\":\"string\"}],\"output\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"count\",\"dataType\":\"string\"}]},\"datasink\":{\"type\":\"hdfs\",\"spec\":{\"url\":\"${test}/analytics/${job_id}/tasks/${task_id}/\",\"hdfsName\":\"test\",\"hdfsPath\":\"/analytics/${job_id}/tasks/${task_id}/\",\"user\":\"root\"}},\"datasource\":{\"type\":\"nebula\",\"spec\":{\"type\":\"nebula\",\"space\":\"demo_basketballplayer\",\"graphd\":\"192.168.8.131:9669\",\"user\":\"root\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000}}}],\"deps\":[]}"}
+        data = {"name":"QA_生成版本_" + str(QA_random),"schema":"{\"datasources\":[{\"type\":\"hdfs\",\"name\":\"test\",\"spec\":{\"user\":\"root\",\"url\":\"hdfs://192.168.8.168:9000/ll_test\"}}],\"tasks\":[{\"id\":\"analytics_apsp_1\",\"name\":\"APSP\",\"clusterSize\":1,\"type\":\"analytics_apsp\",\"spec\":{\"vtype\":\"string\",\"processes\":1,\"threads\":3,\"nebula_input_edges\":\"follow,serve\",\"nebula_input_edges_props\":\",\"},\"graph\":{\"x\":278,\"y\":-1,\"params\":[],\"groupName\":\"path\",\"input\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"weight\",\"dataType\":\"string\"}],\"output\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"},{\"name\":\"count\",\"dataType\":\"string\"}]},\"datasink\":{\"type\":\"hdfs\",\"spec\":{\"url\":\"${test}/analytics/${job_id}/tasks/${task_id}/\",\"hdfsName\":\"test\",\"hdfsPath\":\"/analytics/${job_id}/tasks/${task_id}/\",\"user\":\"root\"}},\"datasource\":{\"type\":\"nebula\",\"spec\":{\"type\":\"nebula\",\"space\":\"demo_basketballplayer\",\"graphd\":\"192.168.8.48:9669\",\"user\":\"root\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000}}}],\"deps\":[]}"}
         InterfaceExplorer.interface_update_workflow(workflow_id,data)
         data = {"flowId":workflow_id}
         InterfaceExplorer.interface_add_job(data)
         time.sleep(2)
-        data = {"name":"QA_回滚版本_" + str(QA_random),"schema":"{\"datasources\":[{\"type\":\"hdfs\",\"name\":\"test\",\"spec\":{\"user\":\"root\",\"url\":\"hdfs://192.168.8.168:9000/ll_test\"}}],\"tasks\":[{\"id\":\"analytics_pagerank_1\",\"name\":\"PageRank\",\"clusterSize\":1,\"type\":\"analytics_pagerank\",\"spec\":{\"iterations\":\"10\",\"is_directed\":\"true\",\"eps\":\"0.0001\",\"damping\":\"0.85\",\"vtype\":\"string\",\"processes\":1,\"threads\":3,\"nebula_input_edges\":\"follow,serve\",\"nebula_input_edges_props\":\",\"},\"graph\":{\"x\":495,\"y\":263.76668548583984,\"params\":[],\"groupName\":\"nodeImportance\",\"input\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"}],\"output\":[{\"name\":\"vid\",\"dataType\":\"string\"},{\"name\":\"value\",\"dataType\":\"string\"}]},\"datasink\":{\"type\":\"hdfs\",\"spec\":{\"url\":\"${test}/analytics/${job_id}/tasks/${task_id}/\",\"hdfsName\":\"test\",\"hdfsPath\":\"/analytics/${job_id}/tasks/${task_id}/\",\"user\":\"root\"}},\"datasource\":{\"type\":\"nebula\",\"spec\":{\"type\":\"nebula\",\"space\":\"demo_basketballplayer\",\"graphd\":\"192.168.8.131:9669\",\"user\":\"root\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000}}}],\"deps\":[]}"}
+        data = {"name":"QA_回滚版本_" + str(QA_random),"schema":"{\"datasources\":[{\"type\":\"hdfs\",\"name\":\"test\",\"spec\":{\"user\":\"root\",\"url\":\"hdfs://192.168.8.168:9000/ll_test\"}}],\"tasks\":[{\"id\":\"analytics_pagerank_1\",\"name\":\"PageRank\",\"clusterSize\":1,\"type\":\"analytics_pagerank\",\"spec\":{\"iterations\":\"10\",\"is_directed\":\"true\",\"eps\":\"0.0001\",\"damping\":\"0.85\",\"vtype\":\"string\",\"processes\":1,\"threads\":3,\"nebula_input_edges\":\"follow,serve\",\"nebula_input_edges_props\":\",\"},\"graph\":{\"x\":495,\"y\":263.76668548583984,\"params\":[],\"groupName\":\"nodeImportance\",\"input\":[{\"name\":\"src\",\"dataType\":\"string\"},{\"name\":\"dst\",\"dataType\":\"string\"}],\"output\":[{\"name\":\"vid\",\"dataType\":\"string\"},{\"name\":\"value\",\"dataType\":\"string\"}]},\"datasink\":{\"type\":\"hdfs\",\"spec\":{\"url\":\"${test}/analytics/${job_id}/tasks/${task_id}/\",\"hdfsName\":\"test\",\"hdfsPath\":\"/analytics/${job_id}/tasks/${task_id}/\",\"user\":\"root\"}},\"datasource\":{\"type\":\"nebula\",\"spec\":{\"type\":\"nebula\",\"space\":\"demo_basketballplayer\",\"graphd\":\"192.168.8.48:9669\",\"user\":\"root\",\"graphd_timeout\":60000,\"metad_timeout\":60000,\"storaged_timeout\":60000}}}],\"deps\":[]}"}
         InterfaceExplorer.interface_update_workflow(workflow_id,data)
         data = {"flowId":workflow_id}
         InterfaceExplorer.interface_add_job(data)
@@ -151,7 +151,7 @@ class Testworkflow:
         job_list = InterfaceExplorer.interface_get_jobs().json()["data"]["items"][0]["id"]
         assert job_list == job_id
 
-        # 存在workFlow，起始task需要输入一个参数 不输入参数并创建失败
+        # 存在workFlow，起始task需要输入一个参数 不输入参数创建失败
         workflow_id = read_yaml_by_key("需要1个参数_单tasks_不输入参数","/conf/tmp.yaml")
         data = {"id":str(workflow_id)}
         job_code = InterfaceExplorer.interface_submit_job(workflow_id,data).json()["code"]

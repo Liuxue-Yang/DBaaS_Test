@@ -1,3 +1,4 @@
+import asyncio
 import time
 import random
 import pytest
@@ -13,18 +14,18 @@ class Testlogin:
     def test_login(self):
         # 特密码存在特殊字符
         ngql = {"gql":"ALTER USER `root` WITH PASSWORD 'nebula~!@#$%^&*';"}
-        InterfaceExplorer.Single_ngql(ngql)
+        asyncio.run(InterfaceExplorer.test_WebSocket_ngql(ngql))
         time.sleep(10)
         userName = "root"
         password = "nebula~!@#$%^&*"
-        data = {"address":"192.168.8.131","port":9669}
+        data = {"address":"192.168.8.48","port":9669}
         code = InterfaceExplorer.interface_connect_failed(userName,password,data).json()["code"]
         assert 0 == code
 
         # 登录失败、错误密码、错误用户名
         userName = "QA"
         password = "Error"
-        data = {"address":"192.168.8.131","port":9669}
+        data = {"address":"192.168.8.48","port":9669}
         code = InterfaceExplorer.interface_connect_failed(userName,password,data).json()["code"]
         assert 0 != code
 
@@ -37,10 +38,10 @@ class Testlogin:
 
         # 使用更改后的密码登录
         ngql = {"gql":"ALTER USER `root` WITH PASSWORD 'nebula';"}
-        InterfaceExplorer.Single_ngql(ngql)
+        asyncio.run(InterfaceExplorer.test_WebSocket_ngql(ngql)).json()
         time.sleep(10)
         userName = "root"
         password = "nebula"
-        data = {"address":"192.168.8.131","port":9669}
+        data = {"address":"192.168.8.48","port":9669}
         code = InterfaceExplorer.interface_connect_failed(userName,password,data).json()["code"]
         assert 0 == code

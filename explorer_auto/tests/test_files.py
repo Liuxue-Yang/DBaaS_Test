@@ -39,22 +39,29 @@ class Testfiles:
             file_path = os.path.join(abs_path, file)
             # 打印文件路径
             print(file_path)
-            code = InterfaceExplorer.import_add_csv(str(file_path)).json()["code"]
+            csv_name = file
+            code = InterfaceExplorer.import_add_csv(str(file_path),csv_name).json()["code"]
             assert 0 == code
-        print(files)
 
         # 调取列表 循环判断文件名称
-        json_data  = InterfaceExplorer.import_get_csv().json()["data"]["list"]
+        csv_data = InterfaceExplorer.import_get_csv()
+        json_data  = csv_data.json()["data"]["list"]
         for i in range(0, len(files)):
+            print(json_data[i]['name'])
             assert files[i] == json_data[i]['name']
 
         # 校验列数、行数
-        json_data = InterfaceExplorer.import_get_csv().json()
-        assert 1 == len(json_data["data"]["list"][5]["content"][0])   # 1列
-        assert 10 == len(json_data["data"]["list"][2]["content"][0])  # 10列 
-        assert 50 == len(json_data["data"]["list"][8]["content"][0])  # 10列
-        assert 1 == len(json_data["data"]["list"][6]["content"])  # 1行
-        assert 3 == len(json_data["data"]["list"][3]["content"])  # 10行只展示3行
+        json_data = csv_data.json()
+        A = json_data["data"]["list"][5]["sample"].strip().split('\r\n') # 1列数据
+        B = json_data["data"]["list"][2]["sample"].strip().split('\r\n') # 10列数据
+        C = json_data["data"]["list"][8]["sample"].strip().split('\r\n') # 50列数据
+        D = json_data["data"]["list"][6]["sample"].strip().split('\r\n') # 1行数据
+        E = json_data["data"]["list"][3]["sample"].strip().split('\r\n') # 10行只展示5行
+        assert 1 == len(A[0].strip().split(','))
+        assert 10 == len(B[0].strip().split(','))
+        assert 50 == len(C[0].strip().split(','))
+        assert 1 == len(D)  # 1行
+        assert 5 == len(E)  # 默认最多展示5行数据
 
         # 循环删除所有文件
         for i in range(0, len(files)):

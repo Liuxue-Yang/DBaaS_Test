@@ -2,13 +2,22 @@ import base64
 import json
 import time
 import os
+import uuid
+import aiohttp
+import asyncio
+import requests
+import time
 import csv
 import string
+import websocket
+import websockets
 from urllib.parse import urlencode
-
+from websocket import create_connection
 from urllib3 import encode_multipart_formdata
 from explorer_auto.common.request_util import RequestMain
 from requests_toolbelt import MultipartEncoder
+from multiprocessing import Process, Lock
+from explorer_auto.common.yaml_util import read_yaml_by_key
 
 class InterfaceExplorer:
     #API 接口
@@ -100,8 +109,6 @@ class InterfaceExplorer:
         result = RequestMain.request_main(method="get", url=url, headers=headers,
                                                  default_assert=default_assert)
         return result
-
-    
 
     def interface_get_job_detail(job_id, default_assert=True):
         print("获取job详情接口")
@@ -270,6 +277,19 @@ class InterfaceExplorer:
                                             default_assert=default_assert)
         return result
 
+    def interface_get_job_list(data,default_assert=True):
+        print('获取job列表详情')
+        url = '/api-analytics/jobs/sync'
+        headers = {
+            'Content-Type': 'application/json;',
+            'Cookie': InterfaceExplorer.Cookie
+        }
+        data = json.dumps(data)
+        print(data)
+        result = RequestMain.request_main(method="post",url=url,headers=headers,
+                                            data=data,default_assert=default_assert)
+        return result
+
     def interface_get_id_job(job_id,default_assert=True):
         print('查看job详情')
         url = '/api-analytics/jobs/{}'.format(job_id)
@@ -396,10 +416,23 @@ class InterfaceExplorer:
 
         return result
 
-    def import_add_csv(file_path,default_assert=True):
+
+    def import_add_csv(file_path,csv_name,default_assert=True):
         print('上传csv文件')
         url = '/api/files'
-        files = {'file': open(file_path, 'rb')}
+        files = {
+            'file': open(
+                file_path,
+                 'rb'
+                 ),
+            'config': (
+                None, 
+                json.dumps({
+                    "name":csv_name,
+                    "delimiter":",",
+                    "withHeader":False
+                    }), 
+            'application/json')}
         result = RequestMain.request_main(method="put",url=url,files=files,
                                             default_assert=default_assert)
         print(result)
@@ -429,12 +462,14 @@ class InterfaceExplorer:
 
     def import_delete_csv(csv_name,default_assert=True):
         print('删除csv文件')
-        url = '/api/files/{}'.format(csv_name)
+        url = '/api/files'
         headers = {
+            'Content-Type': 'application/json;',
             'cookie':InterfaceExplorer.Cookie
         }
+        data = json.dumps({"names":[csv_name]})
         result = RequestMain.request_main(method="delete",url=url,headers=headers,
-                                            default_assert=default_assert)
+                                            data = data,default_assert=default_assert)
         return result
         
     def Single_ngql(ngql,default_assert=True):
@@ -627,7 +662,7 @@ class InterfaceExplorer:
 
     def put_config(data,default_assert=True):
         print('更新配置')
-        url = '/api-analytics/config/global'
+        url = '/api-config/global'
         headers = {
             'Content-Type': 'application/json;',
             'cookie':InterfaceExplorer.Cookie
@@ -639,7 +674,7 @@ class InterfaceExplorer:
 
     def get_config(default_assert=True):
         print('获取配置')
-        url = '/api-analytics/config/global'
+        url = '/api-config/global'
         headers = {
             'Content-Type': 'application/json;',
             'cookie':InterfaceExplorer.Cookie
@@ -682,3 +717,69 @@ class InterfaceExplorer:
         result = RequestMain.request_main(method="post",url=url,headers=headers,
                                             data=data,default_assert=default_assert)
         return result
+
+    # WebSocket异步单条语句接口
+    async def test_WebSocket_ngql(ngql,*space):
+        print('异步执行单条语句')
+        msg_id = str(uuid.uuid4())
+        headers = {
+            'cookie': InterfaceExplorer.Cookie,
+        }
+        ip = read_yaml_by_key("graphd_ip",'/conf/conf.yaml')
+        async with aiohttp.ClientSession() as session:
+            async with session.ws_connect('ws://{}:7002/nebula_ws'.format(ip),headers=headers) as ws:
+                await ws.send_json({
+                    "header": {
+                        "msgId": msg_id,
+                        "version": "1.0"
+                    },
+                    "body": {
+                        "product": "Studio",
+                        "msgType": "ngql",
+                        "content": {
+                            "gql": ngql,
+                            "space":space
+                        }
+                    }
+                })
+                result = await ws.receive()
+                result_json = result.json()['header']['msgId']
+                print(result)
+                if msg_id == result_json:
+                    print("UUID match")
+                else:
+                    print("UUID does not match")
+                return result
+
+    # WebSocket异步多条语句接口
+    async def test_WebSocket_batch_ngql(ngql,space):
+        print('异步执行多条语句')
+        msg_id = str(uuid.uuid4())
+        headers = {
+            'cookie': InterfaceExplorer.Cookie,
+        }
+        ip = read_yaml_by_key("graphd_ip",'/conf/conf.yaml')
+        async with aiohttp.ClientSession() as session:
+            async with session.ws_connect('ws://{}:7002/nebula_ws'.format(ip),headers=headers) as ws:
+                await ws.send_json({
+                    "header": {
+                        "msgId": msg_id,
+                        "version": "1.0"
+                    },
+                    "body": {
+                        "product": "Studio",
+                        "msgType": "batch_ngql",
+                        "content": {
+                            "gqls": ngql,
+                            'space':space
+                        }
+                    }
+                })
+                result = await ws.receive()
+                print(result)
+                result_json = result.json()['header']['msgId']
+                if msg_id == result_json:
+                    print("UUID match")
+                else:
+                    print("UUID does not match")
+                return result
