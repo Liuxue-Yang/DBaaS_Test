@@ -22,7 +22,7 @@ class RequestMain:
             """
             封装request请求，将请求方法、请求地址，请求参数、请求头等信息入参。
             """
-            url = read_yaml_by_key("base_url") + url
+            url = read_yaml_by_key("dbaas_url") + url
             print("url:",url)
             re_data = RequestMain.session.request(method, url, params=params, data=data, json=json, headers=headers, **kwargs)
             print(re_data.status_code)

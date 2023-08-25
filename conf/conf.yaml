@@ -1,8 +1,10 @@
 # 必改项：explorer-server的服务地址
-base_url: "http://192.168.8.48:7002"
+dbaas_url: "https://dev.cloud.nebula-graph.io"
 
-# 必改项：nebula grapd连接信息
-graphd_ip: "192.168.8.48"
-graphd_port: 9669
-graphd_username: "root"
-graphd_password: "nebula"
+# # 必改项：nebula grapd连接信息
+# graphd_ip: "192.168.8.48"
+# graphd_port: 9669
+# graphd_username: "root"
+# graphd_password: "nebula"
+dbaas_username: "dbaas-test@vesoft.com"
+dbaas_password: "Nebula123"
